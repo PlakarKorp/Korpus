@@ -1,0 +1,36 @@
+[submodule "github.com/opencv/opencv"]
+	path = github.com/opencv/opencv
+	url = https://github.com/opencv/opencv
+[submodule "github.com/microsoft/vscode"]
+	path = github.com/microsoft/vscode
+	url = https://github.com/microsoft/vscode
+[submodule "github.com/llvm/llvm-project"]
+	path = github.com/llvm/llvm-project
+	url = https://github.com/llvm/llvm-project
+[submodule "github.com/OpenBSD/src"]
+	path = github.com/OpenBSD/src
+	url = https://github.com/OpenBSD/src
+[submodule "github.com/torvalds/linux"]
+	path = github.com/torvalds/linux
+	url = https://github.com/torvalds/linux.git
+[submodule "github.com/OpenBSD/ports"]
+	path = github.com/OpenBSD/ports
+	url = https://github.com/OpenBSD/ports
+[submodule "github.com/OpenBSD/www"]
+	path = github.com/OpenBSD/www
+	url = https://github.com/OpenBSD/www
+[submodule "github.com/NetBSD/pkgsrc"]
+	path = github.com/NetBSD/pkgsrc
+	url = https://github.com/NetBSD/pkgsrc
+[submodule "github.com/freebsd/freebsd-src"]
+	path = github.com/freebsd/freebsd-src
+	url = https://github.com/freebsd/freebsd-src
+[submodule "github.com/NetBSD/src"]
+	path = github.com/NetBSD/src
+	url = https://github.com/NetBSD/src
+[submodule "github.com/freebsd/freebsd-doc"]
+	path = github.com/freebsd/freebsd-doc
+	url = https://github.com/freebsd/freebsd-doc
+[submodule "github.com/freebsd/freebsd-ports"]
+	path = github.com/freebsd/freebsd-ports
+	url = https://github.com/freebsd/freebsd-ports
