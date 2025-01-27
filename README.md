@@ -4,6 +4,7 @@ Corpus of data to test backups on
 
 ## Included data sets
 - [Linux Kernel](github.com/torvalds/linux): Large size, deep directory structure, diverse file formats.
+- [Linux Firmware](https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/): Lots of binary files.
 - [LLVM Project](github.com/llvm/llvm): Large source codebase with frequent changes.
 - [VS Code](github.com/microsoft/vscode): Modern development project with binaries, JSON, and Markdown files.
 - [OpenCV](github.com/opencv/opencv): A mix of C++ code, large datasets, and documentation.
