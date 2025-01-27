@@ -34,3 +34,6 @@
 [submodule "github.com/freebsd/freebsd-ports"]
 	path = github.com/freebsd/freebsd-ports
 	url = https://github.com/freebsd/freebsd-ports
+[submodule "git.kernel.org/linux-firmware"]
+	path = git.kernel.org/linux-firmware
+	url = https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/
