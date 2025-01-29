@@ -1,0 +1,106 @@
+#!/bin/sh
+
+set -e
+set -o pipefail
+
+progname="$(basename "$0")"
+
+usage() {
+	echo "Usage: $progname [-p plakar] [-r rounds] [-t tmpdir]" >&2
+	exit 1
+}
+
+log() {
+	echo "$progname: $@" >&2
+}
+
+init() {
+	if [ "$1" = reset ]; then
+		rm -rf ~/.plakar ~/.cache/plakar
+	fi
+	$plakar create -no-encryption || {
+		code=$?
+		log "plakar init failed with code $code"
+		exit $code
+	}
+
+	for sub in $(submodules); do
+		git submodule deinit "$sub" >/dev/null
+	done
+}
+
+submodules() {
+	filter='//'
+	case "$1" in
+	inactive)	filter='/^-/' ;;
+	active)		filter='/^ /' ;;
+	esac
+
+	git submodule | awk "$filter"'{ print $2 }'
+}
+
+plakar=plakar
+rounds=50
+tmpdir=/tmp/
+while getopts p:r:t: name; do
+	case $name in
+	p)	plakar="$OPTARG" ;;
+	r)	rounds="$OPTARG" ;;
+	t)	tmpdir="$OPTARG" ;;
+	?)	usage ;;
+	esac
+done
+shift $(($OPTIND - 1))
+test $# -ne 0 && usage
+
+log "starting with config: plakar=$plakar rounds=$rounds tmpdir=$tmpdir"
+
+round=0
+while [ "$round" -lt "$rounds" ]; do
+	round=$((round + 1))
+	log ">>> round $round"
+
+	init reset
+	submodules inactive | sort -R | while read sub; do
+		log "$round: checking out $sub"
+		git submodule --quiet update --init --checkout "$sub"
+
+		$plakar backup -quiet || {
+			code=$?
+			log "$round: backup failed with $code; exiting"
+			exit $code
+		}
+
+		snapid=$($plakar ls | awk '{x=$2}END{print x}')
+		$plakar check -quiet $snapid || {
+			code=$?
+			log "$round: check of $snapid failed; exiting"
+			exit $code
+		}
+
+		d=$(mktemp -d)
+		$plakar restore -quiet -rebase -to "$d/" $snapid || {
+			code=$?
+			log "$round: failed to restore $snapid to $d"
+			rm -rf "$d"
+			exit $code
+		}
+
+		diff -r . "$d/$PWD" || {
+			code=$?
+			log "diff exit code $code"
+			log "$round: data restored from snapshot $d doesn't match the expected state"
+			log "$round: submodules: $(submodules active)"
+			rm -rf "$d"
+			exit $code
+		}
+		rm -rf "$d"
+	done
+
+	log "$round: full repo check"
+	$plakar check -quiet || {
+		code=$?
+		log "$round: full repo check failed with code $code"
+		exit $code
+	}
+done
